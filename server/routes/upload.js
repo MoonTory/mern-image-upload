@@ -77,52 +77,48 @@ router.post('/upload/single', upload.single('file'), async (req, res, next) => {
 
 // API endpoint to upload multiple files, in this case up to 5 files.
 // This can be modified by the second parameter of the 'upload.array(fileName, numFiles)' function.
-router.post(
-  '/upload/multiple',
-  upload.array('file', 5),
-  async (req, res, next) => {
-    try {
-      // req.files holds an array of the multer uploaded files, up to the max of '5'.
-      // req.body holds any other form fields, if there are any.
+router.post('/upload/multiple', upload.array('file', 5), async (req, res, next) => {
+  try {
+    // req.files holds an array of the multer uploaded files, up to the max of '5'.
+    // req.body holds any other form fields, if there are any.
 
-      let photos = []; // Temporary array that will store the uploaded photos url, to then finally be saved into Mongo.
+    let photos = []; // Temporary array that will store the uploaded photos url, to then finally be saved into Mongo.
 
-      // Loop through the array of files and upload each one of them to Cloudinary.
-      req.files.forEach(async (values, index, array) => {
-        await cloudinary.v2.uploader.upload(values.path, (err, result) => {
-          if (err) {
-            // In case of an error we log it out and send it back to the client.
-            console.log('err', err);
-            res.status(400).json({
-              err: err
-            });
-          }
-
-          // Otherwise, the upload was succesful & push the resulting Cloudinary url to our array of photos of the payload.
-          photos.push({ url: result.secure_url });
-        });
-
-        // Only send a response back to the client after all of the files have been properly uploaded.
-        if (photos.length === array.length) {
-          // Creating a new User to be saved into the DB.
-          const user = new UserModel({
-            name: req.body.name,
-            photos: photos
-          });
-
-          // Saving the model to the DB and awaiting the results, that we will then send back to the client.
-          const payload = await user.save();
-
-          // Send response back to the client.
-          res.status(200).json({
-            payload
+    // Loop through the array of files and upload each one of them to Cloudinary.
+    req.files.forEach(async (values, index, array) => {
+      await cloudinary.v2.uploader.upload(values.path, (err, result) => {
+        if (err) {
+          // In case of an error we log it out and send it back to the client.
+          console.log('err', err);
+          res.status(400).json({
+            err: err
           });
         }
+
+        // Otherwise, the upload was succesful & push the resulting Cloudinary url to our array of photos of the payload.
+        photos.push({ url: result.secure_url });
       });
-    } catch (error) {
-      next(error);
-    }
+
+      // Only send a response back to the client after all of the files have been properly uploaded.
+      if (photos.length === array.length) {
+        // Creating a new User to be saved into the DB.
+        const user = new UserModel({
+          name: req.body.name,
+          photos: photos
+        });
+
+        // Saving the model to the DB and awaiting the results, that we will then send back to the client.
+        const payload = await user.save();
+
+        // Send response back to the client.
+        res.status(200).json({
+          payload
+        });
+      }
+    });
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 export default router;
