@@ -24,7 +24,7 @@ export class SingleFileForm extends Component {
 
           const response = await axios({
             method: 'post',
-            url: 'http://localhost:5002/api/upload/single',
+            url: 'http://localhost:5003/api/upload/single',
             data: payload,
             config: { headers: { 'Content-Type': 'multipart/form-data' } }
           });
