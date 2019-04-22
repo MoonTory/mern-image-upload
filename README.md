@@ -50,7 +50,7 @@ npm install
 ### Front-end
 
 - [ReactJs](https://reactjs.org/) - Web framework used for making the SPA
-- [axios](https://www.npmjs.com/package/axios) - Used for making http requestso to our back-end api.
+- [axios](https://www.npmjs.com/package/axios) - Used for making http requests to our back-end api.
 - [formik](https://www.npmjs.com/package/formik) - For easily making re-usable forms.
 
 ## Versioning
