@@ -20,7 +20,7 @@ export default {
     // The 'Cloudinary' API doesn't return a Promise by default, so we have to excplicitly return one ouselves so that
     // we can use the new await/async syntax.
     return new Promise((resolve, reject) => {
-      let payload = []; // Temporary array that will store the uploaded photos url, to then finally be saved into Mong
+      let payload = []; // Temporary array that will store the uploaded photos url to be sent back to client.
 
       // Loop through the array of files and upload each one of them to Cloudinary.
       files.forEach((values, index, array) => {
