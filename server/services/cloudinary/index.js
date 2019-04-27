@@ -23,7 +23,7 @@ export default {
       let payload = []; // Temporary array that will store the uploaded photos url, to then finally be saved into Mong
 
       // Loop through the array of files and upload each one of them to Cloudinary.
-      files.forEach(async (values, index, array) => {
+      files.forEach((values, index, array) => {
         cloudinary.v2.uploader.upload(values.path, (err, result) => {
           if (err) return reject(err); // In case of an error we reject the promise and pass the error.
 
