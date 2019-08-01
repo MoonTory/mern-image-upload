@@ -10,6 +10,7 @@
     "watch:client": "cd ../client && yarn start"
   },
   "dependencies": {
+    "@google-cloud/storage": "^3.0.4",
     "cloudinary": "^1.13.2",
     "cors": "^2.8.5",
     "esm": "^3.2.20",
