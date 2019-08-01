@@ -1,4 +1,4 @@
-# MERN Image Upload API w/ Cloudinary
+# MERN Image Upload API w/ Cloudinary | Google Cloud Storage
 
 > REST API Microservice example for image uploading, backed by Express & Cloudinary.
 
