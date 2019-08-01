@@ -3,10 +3,13 @@ import multer from 'multer';
 import cloudinary from 'cloudinary';
 
 import CloudinaryService from '../services/cloudinary';
-import { UserModel } from '../models/user';
+import { AlbumModel } from '../models/album';
 import joiValidator from '../utils/joi-validator';
 
-const { validatePayload, Schemas } = joiValidator;
+const {
+  validatePayload,
+  Schemas: { albumSchema }
+} = joiValidator;
 
 // Creating an instance of the Express Router that we will export and use in our app.
 const router = Router();
@@ -19,10 +22,10 @@ const storage = multer.diskStorage({
   }
 });
 
-// This function is for filtering the files that are being upload to only be the specified types of 'images'.
+// This function is for filtering the files that are being upload to only be the specified types of 'images' & 'pdf'.
 const imageFilter = function(req, file, cb) {
-  // accept image files only
-  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+  // accept image & pdf files only
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif|pdf)$/i)) {
     return cb(new Error('Only image files are allowed!'), false);
   }
   cb(null, true);
@@ -41,8 +44,8 @@ router.post('/upload/single', upload.single('file'), async (req, res, next) => {
     // req.file holds multer uploaded file.
     // req.body holds any other form fields, if there are any.
 
-    const tmp = await validatePayload(Schemas.modelSchema, req.body);
-    console.log('tmp', tmp.name);
+    const tmp = await validatePayload(albumSchema, req.body);
+    console.log('tmp', tmp);
 
     await cloudinary.v2.uploader.upload(req.file.path, async (err, result) => {
       if (err) {
@@ -54,15 +57,15 @@ router.post('/upload/single', upload.single('file'), async (req, res, next) => {
       }
       // Otherwise, the upload was succesful & push the resulting Cloudinary url to our payload.
       // payload.photo = { url: result.secure_url };
-
-      // Creating a new User to be saved into the DB.
-      const user = new UserModel({
-        name: req.body.name,
+      console.log('result', result);
+      // Creating a new Album to be saved into the DB.
+      const album = new AlbumModel({
+        title: req.body.title,
         photos: { url: result.secure_url }
       });
 
       // Saving the model to the DB and awaiting the results, that we will then send back to the client.
-      const payload = await user.save();
+      const payload = await album.save();
 
       if (payload) {
         // Send response back to the client.
