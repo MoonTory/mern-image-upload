@@ -3,7 +3,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 
 // Routes
-import upload from './routes/upload';
+import cloudinary from './routes/cloudinary-upload';
 
 // Config
 import { APP_PORT, MONGO_URI } from './config';
@@ -19,12 +19,12 @@ app.use(json());
 app.use(urlencoded({ extended: false }));
 
 // API endpoint for our uploading routes.
-app.use('/api', upload);
+app.use('/api', cloudinary);
 
 // API endpoint to greet a new user!
 app.get('/', (req, res) =>
   res.send(
-    'Welcome to File Uploading with Multer & Cloudinary, Try out api/upload/single & api/upload/multiple'
+    'Welcome to File Uploading with Multer & Cloudinary, Try out api/cloudinary/upload/single & api/cloudinary/upload/multiple'
   )
 );
 
