@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
-const UserSchema = mongoose.Schema(
+const AlbumSchema = mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
       required: true
     },
@@ -13,4 +13,4 @@ const UserSchema = mongoose.Schema(
   }
 );
 
-export const UserModel = mongoose.model('User', UserSchema);
+export const AlbumModel = mongoose.model('Album', AlbumSchema);
