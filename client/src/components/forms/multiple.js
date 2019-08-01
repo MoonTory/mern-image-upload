@@ -23,41 +23,56 @@ export class MultipleFileForm extends Component {
             return;
           }
 
-          console.log('payload', payload);
+          try {
+            console.log('payload', payload);
 
-          const response = await axios({
-            method: 'post',
-            url: 'http://localhost:5002/api/gallery/album/create',
-            data: payload,
-            config: { headers: { 'Content-Type': 'multipart/form-data' } }
-          });
+            const response = await axios({
+              method: 'post',
+              url: 'http://localhost:5003/api/cloudinary/upload/multiple',
+              data: payload,
+              config: { headers: { 'Content-Type': 'multipart/form-data' } }
+            });
 
-          console.log('response', response);
-          actions.setSubmitting(false);
-          actions.resetForm();
+            console.log('response', response);
+            actions.setSubmitting(false);
+            actions.resetForm();
+          } catch (error) {
+            console.log('error', error);
+            actions.setSubmitting(false);
+            actions.resetForm();
+          }
         }}
         // TODO: Write Yup validation for the form
-        render={({ isSubmitting, errors, touched, values, setFieldValue }) => (
-          <Form encType="multipart/form-data">
-            <div className="form-group">
-              <label>title:</label>
-              <Field className="form-control" type="title" name="title" placeholder="title" />
+        render={({ isSubmitting, setFieldValue }) => (
+          <Form encType='multipart/form-data'>
+            <div className='form-group'>
+              <label>Title:</label>
+              <Field
+                className='form-control'
+                type='title'
+                name='title'
+                placeholder='title'
+              />
             </div>
-            <div className="form-group">
-              <label htmlFor="file">File upload</label>
+            <div className='form-group'>
+              <label htmlFor='file'>File upload</label>
               <input
-                id="file"
-                name="file"
-                type="file"
+                id='file'
+                name='file'
+                type='file'
                 multiple
                 onChange={event => {
                   setFieldValue('file', event.currentTarget.files);
                 }}
-                className="form-control"
+                className='form-control'
               />
             </div>
             {isSubmitting ? null : (
-              <button className="btn btn-secondary" type="submit" disabled={isSubmitting}>
+              <button
+                className='btn btn-secondary'
+                type='submit'
+                disabled={isSubmitting}
+              >
                 Enviar
               </button>
             )}
